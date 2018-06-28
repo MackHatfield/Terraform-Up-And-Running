@@ -56,15 +56,14 @@ variable "server_port" {
   default     = 8080
 }
 
-# output "public_ip" {
-#   value = "${aws_launch_configuration.example.public_ip}"
-# }
-
 data "aws_availability_zones" "all" {}
 
 resource "aws_autoscaling_group" "example" {
   launch_configuration = "${aws_launch_configuration.example.id}"
   availability_zones   = ["${data.aws_availability_zones.all.names}"]
+
+  load_balancers    = ["${aws_elb.example.name}"]
+  health_check_type = "ELB"
 
   min_size = 2
   max_size = 10
@@ -96,3 +95,8 @@ resource "aws_elb" "example" {
     target              = "HTTP:${var.server_port}/"
   }
 }
+
+output "elb_dns_name" {
+  value = "${aws_elb.example.dns_name}"
+}
+
