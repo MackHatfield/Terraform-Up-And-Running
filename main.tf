@@ -33,23 +33,7 @@ resource "aws_security_group" "instance" {
   }
 }
 
-resource "aws_security_group" "elb" {
-  name = "terraform-example-elb"
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
 
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
@@ -65,7 +49,7 @@ resource "aws_autoscaling_group" "example" {
   load_balancers    = ["${aws_elb.example.name}"]
   health_check_type = "ELB"
 
-  min_size = 2
+  min_size = 3
   max_size = 10
 
   tag {
@@ -93,6 +77,24 @@ resource "aws_elb" "example" {
     timeout             = 3
     interval            = 30
     target              = "HTTP:${var.server_port}/"
+  }
+}
+
+resource "aws_security_group" "elb" {
+  name = "terraform-example-elb"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
