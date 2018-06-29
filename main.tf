@@ -102,3 +102,13 @@ output "elb_dns_name" {
   value = "${aws_elb.example.dns_name}"
 }
 
+terraform {
+  backend "s3" {
+    bucket = "terraform-tutorial-bucket"
+    key = "global/s3/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
+
+
