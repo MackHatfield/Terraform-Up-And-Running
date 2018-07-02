@@ -98,7 +98,7 @@ resource "aws_security_group" "elb" {
 terraform {
   backend "s3" {
     bucket = "terraform-tutorial-bucket"
-    key = "global/s3/terraform.tfstate"
+    key = "state/services/webserver-cluster/terraform.tfstate"
     region = "us-east-1"
   }
 }
