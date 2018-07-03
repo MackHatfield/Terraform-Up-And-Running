@@ -10,3 +10,11 @@ resource "aws_db_instance" "example" {
   username          = "admin"
   password          = "${var.db_password}"
 }
+
+terraform {
+  backend "s3" {
+    bucket = "terraform-tutorial-bucket"
+    key    = "stage/data-stores/mysql/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
